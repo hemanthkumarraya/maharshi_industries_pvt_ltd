@@ -18,11 +18,27 @@ if not files:
 for file in files:
     file_path = os.path.join(OUTPUT_DIR, file)
 
-    if file.lower().endswith((".jpg", ".png", ".jpeg")):
-        st.image(file_path, caption=file, use_column_width=True)
+    with st.container():
+        col1, col2 = st.columns([5, 1])
 
-    elif file.lower().endswith((".mp4", ".avi", ".mov")):
-        st.video(file_path)
+        with col1:
+            if file.lower().endswith((".jpg", ".png", ".jpeg")):
+                st.image(file_path, caption=file, use_column_width=True)
 
-    else:
-        st.text(f"Unsupported file: {file}")
+            elif file.lower().endswith((".mp4", ".avi", ".mov")):
+                st.video(file_path)
+
+            else:
+                st.text(f"Unsupported file: {file}")
+
+        with col2:
+            with open(file_path, "rb") as f:
+                st.download_button(
+                    label="⬇️",
+                    data=f,
+                    file_name=file,
+                    mime="application/octet-stream",
+                    key=file
+                )
+
+        st.divider()
